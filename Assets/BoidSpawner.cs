@@ -6,7 +6,7 @@ using UnityEngine.Rendering;
 
 public class BoidSpawner : MonoBehaviour
 {
-    QuadTree<Boids> m_qtree;
+    public QuadTree<Boids> m_qtree;
     [SerializeField] GameObject m_prefab;
 
     List<Boids> spawnedBoids = new List<Boids>();

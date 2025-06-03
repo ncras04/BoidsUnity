@@ -1,4 +1,6 @@
+using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class QuadTree<T> where T : MonoBehaviour
@@ -79,9 +81,33 @@ public class QuadTree<T> where T : MonoBehaviour
         }
     }
 
-    public bool GetItems(out T[] foundElements)
+    private bool IsOverlapping(Vector2 _objPos, float _size)
     {
-        foundElements = new T[0];
+        return
+            !(Mathf.Abs(_objPos.x - m_position.x) > (_size + m_size)) && !(Mathf.Abs(_objPos.y - m_position.y) > (_size + m_size));
+    }
+
+    public bool GetItems(Vector2 _pos, float _size, ref List<T> _foundElements)
+    {
+        if (IsOverlapping(_pos, _size))
+            if (m_isLeaf)
+            {
+                for (int i = 0; i < Elements.Length; i++)
+                {
+                    if (Elements[i] is not null)
+                        _foundElements.Add((T)Elements[i]);
+                }
+            }
+            else
+            {
+                foreach (QuadTree<T> node in Elements)
+                {
+                    node.GetItems(_pos, _size, ref _foundElements);
+                }
+            }
+        else
+            return false;
+
         return true;
     }
 
