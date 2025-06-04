@@ -406,7 +406,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f07dce8f2e179f4f8c87e2ea727d21f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_prefab: {fileID: 5961183256036221557, guid: 862ee7a993919eb4bae925d6f02a9678, type: 3}
+  m_prefab: {fileID: 2883317639336896320, guid: b7f5263f7d3448d4180700954fbafbe9, type: 3}
+  QuadTreeSize: 10
 --- !u!4 &627572630
 Transform:
   m_ObjectHideFlags: 0
@@ -501,7 +502,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_size: 1
-  spawner: {fileID: 627572629}
 --- !u!4 &1721701069
 Transform:
   m_ObjectHideFlags: 0

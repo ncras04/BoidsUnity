@@ -6,19 +6,27 @@ using UnityEngine.Rendering;
 
 public class BoidSpawner : MonoBehaviour
 {
-    public QuadTree<Boids> m_qtree;
+    static public QuadTree<Boids> m_qtree;
     [SerializeField] GameObject m_prefab;
 
-    List<Boids> spawnedBoids = new List<Boids>();
+    public float QuadTreeSize = 10f;
+    private float spawnpos;
+
+    static List<Boids> spawnedBoids = new List<Boids>();
+
+    private void Awake()
+    {
+        spawnpos = QuadTreeSize / 4;
+    }
 
     void Update()
     {
-        m_qtree = new QuadTree<Boids>(Vector2.zero, 5f);
+        m_qtree = new QuadTree<Boids>(Vector2.zero, QuadTreeSize);
         foreach (Boids boid in spawnedBoids)
             m_qtree.InsertItem(boid);
 
-        if (Input.GetKeyDown(KeyCode.A))
-            spawnedBoids.Add(Instantiate(m_prefab, new Vector2(Random.Range(-5f, 5f), Random.Range(-5f, 5f)), Quaternion.identity).GetComponent<Boids>());
+        if (spawnedBoids.Count < 50)
+            spawnedBoids.Add(Instantiate(m_prefab, new Vector2(Random.Range(-spawnpos, spawnpos), Random.Range(-spawnpos, spawnpos)), Quaternion.identity).GetComponent<Boids>());
     }
 
     private void DrawElements(object[] elems)

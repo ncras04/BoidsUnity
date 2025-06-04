@@ -5,12 +5,10 @@ public class BoidSelector : MonoBehaviour
 {
     [SerializeField] float m_size;
 
-    [SerializeField] BoidSpawner spawner;
-
     void LateUpdate()
     {
         List<Boids> foundBoids = new List<Boids>();
-        if (spawner.m_qtree.GetItems(transform.position, m_size, ref foundBoids))
+        if (BoidSpawner.m_qtree.GetItems(transform.position, m_size, ref foundBoids))
         {
             foreach (Boids boid in foundBoids)
             {
