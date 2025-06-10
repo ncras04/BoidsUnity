@@ -45,8 +45,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Selected: 0
-  direction: {x: 0.707, y: 0.707, z: 0}
-  influenceRadius: 1
-  separationForce: 6.86
-  fieldOfView: 0
-  speed: 0.25
+  m_direction: {x: 0, y: 0, z: 0}
+  influenceRadius: 2
+  inverseSeparationForce: 50
+  inverseAlignmentForce: 8
+  inverseCenterOfMassForce: 100
+  fieldOfView: 0.707
+  speed: 0.3
+  separation: 1
+  alignment: 1
+  cohesion: 1

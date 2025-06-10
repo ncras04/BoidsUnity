@@ -1,21 +1,26 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Boids : MonoBehaviour
 {
     public bool Selected = false;
 
-    public Vector3 direction;
-    [SerializeField] public float influenceRadius;
-    [SerializeField] public float separationForce;
-    [SerializeField] public float fieldOfView;
-    [SerializeField] public float speed = 0.05f;
+    public Vector3 m_direction;
+    [SerializeField][Range(0, 20)] public float influenceRadius;
+    [SerializeField][Range(1, 100)] public float inverseSeparationForce;
+    [SerializeField][Range(1, 100)] public float inverseAlignmentForce;
+    [SerializeField][Range(1, 100)] public float inverseCenterOfMassForce;
+    [SerializeField][Range(0, 1)] public float fieldOfView;
+    [SerializeField][Range(0, 1)] public float speed = 0.05f;
+
+    public bool separation, alignment, cohesion;
 
     List<Boids> foundBoids;
 
     private void Awake()
     {
-        direction = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
+        m_direction = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
     }
     private void Update()
     {
@@ -24,25 +29,44 @@ public class Boids : MonoBehaviour
     private void LateUpdate()
     {
         foundBoids = new List<Boids>();
+
+        Vector3 separationHeading = Vector3.zero;
+        Vector3? averageAlignmentHeading = null;
+
+        int countedBoids = 0;
+
         if (BoidSpawner.m_qtree.GetItems(transform.position, influenceRadius, ref foundBoids))
         {
             foreach (Boids boid in foundBoids)
-            {
                 if (boid != this)
                 {
                     float dist = Vector2.Distance(boid.transform.position, transform.position);
-                    if ((dist <= influenceRadius) && Vector2.Dot((boid.transform.position - transform.position).normalized, direction) > fieldOfView)
+                    if ((dist <= influenceRadius) &&
+                        Vector2.Dot((boid.transform.position - transform.position).normalized, m_direction.normalized) > fieldOfView)
                     {
-                        float ratio = Mathf.Clamp01(dist / separationForce);
-                        direction -= ratio * (boid.transform.position - transform.position);
+                        if (averageAlignmentHeading is null)
+                            averageAlignmentHeading = boid.m_direction;
+                        else
+                            averageAlignmentHeading += boid.m_direction;
+
+                        separationHeading -= boid.transform.position - transform.position;
+
+                        countedBoids++;
                     }
                 }
-            }
 
-            direction = direction.normalized;
+            if (averageAlignmentHeading is not null && alignment)
+                m_direction += ((averageAlignmentHeading.Value / countedBoids) - m_direction) / inverseAlignmentForce;
+
+            if (cohesion)
+                m_direction += (BoidSpawner.centerOfMass - transform.position) / inverseCenterOfMassForce;
+
+            if (separation)
+                m_direction += separationHeading;
+
         }
 
-        transform.position += speed * Time.deltaTime * direction;
+        transform.position += speed * Time.deltaTime * m_direction;
     }
     private void OnDrawGizmos()
     {
@@ -52,7 +76,7 @@ public class Boids : MonoBehaviour
             Gizmos.color = Color.red;
 
         Gizmos.DrawSphere(transform.position, 0.1f);
-        Gizmos.DrawRay(transform.position, direction);
+        Gizmos.DrawRay(transform.position, m_direction);
     }
 
     private void OnDrawGizmosSelected()
