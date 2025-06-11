@@ -407,7 +407,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_prefab: {fileID: 2883317639336896320, guid: b7f5263f7d3448d4180700954fbafbe9, type: 3}
-  spawnAmount: 100
+  spawnAmount: 300
   QuadTreeSize: 100
 --- !u!4 &627572630
 Transform:

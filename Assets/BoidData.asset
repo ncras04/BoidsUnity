@@ -15,8 +15,8 @@ MonoBehaviour:
   influenceRadius: 3
   separationRadius: 0.4
   inverseSeparationForce: 77
-  inverseAlignmentForce: 24
-  inverseCenterOfMassForce: 11
-  inverseCenterOfFieldForce: 5231
+  inverseAlignmentForce: 18
+  inverseCenterOfMassForce: 65.3
+  inverseCenterOfFieldForce: 4173
   fieldOfView: 0.707
   speed: 1
