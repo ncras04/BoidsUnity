@@ -15,8 +15,6 @@ public class BoidSpawner : MonoBehaviour
 
     static List<Boids> spawnedBoids = new List<Boids>();
 
-    static public Vector3 centerOfMass;
-
     private void Awake()
     {
         spawnpos = QuadTreeSize / 4;
@@ -24,22 +22,9 @@ public class BoidSpawner : MonoBehaviour
 
     void Update()
     {
-        Vector3? newCenterOfMass = null;
         m_qtree = new QuadTree<Boids>(Vector2.zero, QuadTreeSize);
         foreach (Boids boid in spawnedBoids)
-        {
-            if (newCenterOfMass is null)
-                newCenterOfMass = boid.transform.position;
-            else
-                newCenterOfMass += boid.transform.position;
             m_qtree.InsertItem(boid);
-        }
-
-        if (newCenterOfMass is not null)
-            centerOfMass = newCenterOfMass.Value / spawnedBoids.Count;
-
-
-
 
         if (spawnedBoids.Count < spawnAmount)
             spawnedBoids.Add(Instantiate(m_prefab, new Vector2(Random.Range(-spawnpos, spawnpos), Random.Range(-spawnpos, spawnpos)), Quaternion.identity).GetComponent<Boids>());
