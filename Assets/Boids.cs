@@ -41,9 +41,9 @@ public class Boids : MonoBehaviour
                         Vector2.Dot((boid.transform.position - transform.position).normalized, m_direction.normalized) > m_data.fieldOfView)
                     {
                         if (averageAlignmentHeading is null)
-                            averageAlignmentHeading = boid.m_direction;
+                            averageAlignmentHeading = boid.m_direction.normalized;
                         else
-                            averageAlignmentHeading += boid.m_direction;
+                            averageAlignmentHeading += boid.m_direction.normalized;
 
                         if (centerOfMass is null)
                             centerOfMass = boid.transform.position;
@@ -77,7 +77,7 @@ public class Boids : MonoBehaviour
         if (Selected)
             Gizmos.color = Color.green;
         else
-            Gizmos.color = Color.red;
+            Gizmos.color = Color.yellow;
 
         Gizmos.DrawSphere(transform.position, 0.1f);
         //Gizmos.DrawRay(transform.position, (Vector3.zero - transform.position));
